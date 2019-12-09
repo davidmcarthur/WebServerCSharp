@@ -47,16 +47,19 @@ namespace WebServerCSharp
             {
                 _listener.Prefixes.Add(s);
             }
-
+            // _responderMethod is what provides our response to localhost:8080/test
+            // this var is an HttpListenerRequest
             _responderMethod = method;
             _listener.Start();
         }
 
+        // Appears to be the default constructor for WebServer
         public WebServer(Func<HttpListenerRequest, string> method, params string[] prefixes)
             : this(prefixes, method)
         {
         }
 
+        // The Run method creates our working thread of our web server(s)
         public void Run()
         {
             ThreadPool.QueueUserWorkItem(o =>
@@ -102,14 +105,15 @@ namespace WebServerCSharp
                 }
             });
         }
-
+        // The stop method of the HttpListener class closes all active listener threads running
         public void Stop()
         {
             _listener.Stop();
             _listener.Close();
         }
     }
-
+    // The program class is our actual page that will be returned by the webserver when a valid
+    // request is passed i.e. localhost:8080/test in our case.
     internal class Program
     {
         public static string SendResponse(HttpListenerRequest request)
@@ -127,4 +131,15 @@ namespace WebServerCSharp
         }
     }
 }
+
+/*A simple webserver. Press a key to quit.
+ * Webserver running...
+ * C:\Users\david\source\repos\WebServerCSharp\WebServerCSharp\bin\Debug\netcoreapp3.1\WebServerCSharp.exe (process 11688) exited with code 0.
+ * To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
+ * Press any key to close this window . . .
+ * 
+ * 
+ * My web page.
+ * 12/9/2019 7:40:17 AM
+ */
 
